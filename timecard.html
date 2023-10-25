@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timecard Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .output { margin-top: 20px; border: 1px solid #ccc; padding: 10px; white-space: pre-line; }
+    </style>
+</head>
+<body>
+
+<h2>Timecard Generator</h2>
+
+<form id="timecardForm">
+    Name: <input type="text" id="name"><br><br>
+    Date: <input type="date" id="date"><br><br>
+    Role: <input type="text" id="role" value="stagehand"><br><br>
+    Show Name: <input type="text" id="showName"><br><br>
+    Venue: <input type="text" id="venue"><br><br>
+    <input type="checkbox" id="twoShifts"> Two Shifts (Load In & Load Out)<br><br>
+    In Time: <input type="time" id="inTime"> Out Time: <input type="time" id="outTime"><br><br>
+    <div id="loadOutTimes" style="display:none;">
+        Load Out - In Time: <input type="time" id="inTimeLoadOut"> Out Time: <input type="time" id="outTimeLoadOut"><br><br>
+    </div>
+    Notes: <textarea id="notes" rows="4" cols="50"></textarea><br><br>
+    <input type="button" value="Generate Timecard" onclick="generateTimecard()">
+</form>
+
+<div class="output" id="output"></div>
+
+<script>
+    document.getElementById("twoShifts").addEventListener("change", function() {
+        document.getElementById("loadOutTimes").style.display = this.checked ? "block" : "none";
+    });
+
+    function generateTimecard() {
+        const name = document.getElementById("name").value;
+        const date = document.getElementById("date").value;
+        const role = document.getElementById("role").value;
+        const showName = document.getElementById("showName").value;
+        const venue = document.getElementById("venue").value;
+        const inTime = document.getElementById("inTime").value;
+        const outTime = document.getElementById("outTime").value;
+        const inTimeLoadOut = document.getElementById("inTimeLoadOut").value;
+        const outTimeLoadOut = document.getElementById("outTimeLoadOut").value;
+        const notes = document.getElementById("notes").value || 'N/A';
+
+        let hours = `In: ${inTime} / Out: ${outTime}`;
+        if (document.getElementById("twoShifts").checked) {
+            hours = `Load In - In: ${inTime} / Out: ${outTime} | Load Out - In: ${inTimeLoadOut} / Out: ${outTimeLoadOut}`;
+        }
+
+        const timecard = `
+Send To: info@headlinepros.com
+
+Name: ${name}
+Date: ${date}
+Role: ${role}
+Show: ${showName}
+Venue: ${venue}
+Hours: ${hours}
+Notes: ${notes}
+`;
+
+        document.getElementById("output").textContent = timecard;
+    }
+</script>
+
+</body>
+</html>
